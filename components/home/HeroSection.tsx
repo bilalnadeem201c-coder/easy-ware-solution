@@ -4,7 +4,6 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring, Variants }
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ParticleField from '@/components/ParticleField';
-import CountUp from '@/components/home/CountUp';
 
 // Stage 1 (first zoom) finishes ~1.4s — heading + all content reveal together.
 // Stage 2 (full zoom) finishes ~2.7s — heading crossfades to the second line.
