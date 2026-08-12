@@ -1,31 +1,46 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import Preloader from "./preloader";
 
 export default function PreloaderWrapper() {
-  const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
   const [show, setShow] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    // Only run on client after hydration
-    setMounted(true);
-    
-    if (pathname === "/") {
+    if (typeof window !== "undefined" && window.location.pathname === "/") {
       const hasSeen = sessionStorage.getItem("easyware-preloader-shown");
       if (!hasSeen) {
         setShow(true);
         sessionStorage.setItem("easyware-preloader-shown", "true");
+
+        // 2 seconds ke baad fade out start karo
+        setTimeout(() => {
+          setFadeOut(true);
+        }, 2000);
+
+        // 2.5 seconds ke baad completely unmount karo
+        setTimeout(() => {
+          setShow(false);
+        }, 2500);
       }
     }
-  }, [pathname]);
+  }, []);
 
-  // Don't render anything during SSR or before mount
-  if (!mounted) return null;
-  
   if (!show) return null;
-  
-  return <Preloader />;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        opacity: fadeOut ? 0 : 1,
+        transition: "opacity 0.5s ease-out",
+        pointerEvents: fadeOut ? "none" : "auto",
+      }}
+    >
+      <Preloader />
+    </div>
+  );
 }

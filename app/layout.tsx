@@ -4,7 +4,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
-import PreloaderWrapper from '@/components/PreloaderWrapper';
+import PreloaderLoader from '@/components/PreloaderLoader';
 
 const BASE_URL = 'https://easywhere-solutions.com';
 
@@ -96,7 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
-        <PreloaderWrapper />
+        <PreloaderLoader />
         <CustomCursor />
         <Navbar />
         <main id="main-content">{children}</main>
