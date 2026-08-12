@@ -92,7 +92,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
             <img 
-              src="/ewslogo.png" 
+              src="/logo.png" 
               alt="EasyWhere Solutions" 
               style={{ width: 34, height: 34, borderRadius: 6, objectFit: 'contain' }} 
             />
