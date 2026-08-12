@@ -17,16 +17,16 @@ const links = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-const [mounted, setMounted] = useState(false);
-
-useEffect(() => {
-  setMounted(true);
-}, []);
+  const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -49,29 +49,53 @@ useEffect(() => {
 
   return (
     <>
+      {/* Animated Glow Border Layer */}
+      <div
+        className="nav-glow-wrapper"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 999,
+          height: scrolled ? '61px' : '81px',
+          transition: 'height 0.4s ease',
+          pointerEvents: 'none',
+        }}
+      >
+        <div className="nav-glow-rotate" />
+      </div>
+
       <motion.nav
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         style={{
-          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
           padding: scrolled ? '14px 0' : '24px 0',
-          background: scrolled ? 'rgba(13,13,26,0.92)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(124,58,237,0.15)' : 'none',
+          background: scrolled ? 'rgba(13,13,26,0.96)' : 'rgba(13,13,26,0.4)',
+          backdropFilter: scrolled ? 'blur(20px) saturate(1.2)' : 'blur(8px)',
+          borderBottom: scrolled 
+            ? '1px solid rgba(6,182,212,0.25)' 
+            : '1px solid rgba(6,182,212,0.08)',
+          boxShadow: scrolled
+            ? '0 0 20px rgba(6,182,212,0.15), 0 0 60px rgba(59,130,246,0.08), inset 0 1px 0 rgba(255,255,255,0.05)'
+            : '0 0 0 transparent',
           transition: 'all 0.4s ease',
         }}
       >
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{
-              width: 34, height: 34, borderRadius: 6,
-              background: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Zap size={18} color="white" fill="white" />
-            </div>
+            <img 
+              src="/ewslogo.png" 
+              alt="EasyWhere Solutions" 
+              style={{ width: 34, height: 34, borderRadius: 6, objectFit: 'contain' }} 
+            />
             <div>
               <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'var(--white)', letterSpacing: '0.02em' }}>
                 EasyWhere
@@ -270,6 +294,46 @@ useEffect(() => {
       <style>{`
         @media (max-width: 768px) { .hidden-mobile { display: none !important; } }
         @media (min-width: 769px) { .mobile-only { display: none !important; } }
+
+        /* Animated crystal glow border */
+        .nav-glow-wrapper {
+          overflow: hidden;
+        }
+        .nav-glow-rotate {
+          position: absolute;
+          inset: -50%;
+          width: 200%;
+          height: 200%;
+          background: conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            rgba(6, 182, 212, 0.4) 60deg,
+            rgba(59, 130, 246, 0.6) 120deg,
+            rgba(124, 58, 237, 0.4) 180deg,
+            rgba(6, 182, 212, 0.4) 240deg,
+            rgba(59, 130, 246, 0.6) 300deg,
+            transparent 360deg
+          );
+          animation: navGlowSpin 4s linear infinite;
+          filter: blur(8px);
+        }
+        .nav-glow-wrapper::after {
+          content: '';
+          position: absolute;
+          inset: 1.5px;
+          background: rgba(13, 13, 26, 0.98);
+          z-index: 1;
+        }
+        @keyframes navGlowSpin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Subtle shimmer on the navbar bottom border */
+        @keyframes borderShimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
       `}</style>
     </>
   );
