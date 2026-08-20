@@ -6,6 +6,7 @@ import MarqueeTicker from '@/components/home/MarqueeTicker';
 import Testimonials from '@/components/home/Testimonials';
 import HomeCTA from '@/components/home/HomeCTA';
 import BeforeAfterShowcase from '@/components/home/BeforeAfterShowcase';
+import ScrollRevealSection from '@/components/ScrollRevealSection';
 
 const BASE_URL = 'https://easywhere-solutions.com';
 
@@ -37,11 +38,12 @@ export default function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }} />
       <HeroSection />
-      <BeforeAfterShowcase />
-      <ServicesPreview />
-      <MarqueeTicker />
-      <Testimonials />!
-      <HomeCTA />
+<ScrollRevealSection />
+<BeforeAfterShowcase />
+<ServicesPreview />
+<MarqueeTicker />
+<Testimonials />
+<HomeCTA />
     </>
   );
 }

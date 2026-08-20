@@ -1,0 +1,414 @@
+.section {
+  position: relative;
+  width: 100%;
+  height: 400vh;
+  background: #05070d;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  overflow: hidden;
+}
+
+.background {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 15% 50%,
+      rgba(45, 90, 160, 0.08),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 85% 25%,
+      rgba(80, 120, 220, 0.06),
+      transparent 28%
+    ),
+    #05070d;
+}
+
+/* ==========================================
+   TOP LABEL
+========================================== */
+
+.topLabel {
+  position: absolute;
+
+  top: 8%;
+  left: 6%;
+
+  z-index: 10;
+
+  color: #7895c5;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  letter-spacing: 4px;
+
+  white-space: nowrap;
+}
+
+.topLabel span {
+  opacity: 0.5;
+}
+
+/* ==========================================
+   RIGHT CONTENT PANEL
+========================================== */
+
+.panel {
+  position: absolute;
+
+  top: 50%;
+  right: 7%;
+
+  z-index: 20;
+
+  width: min(560px, 42vw);
+
+  padding: 55px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(16, 24, 45, 0.82),
+      rgba(7, 12, 25, 0.72)
+    );
+
+  border: 1px solid rgba(130, 170, 255, 0.18);
+
+  border-radius: 2px;
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  box-shadow:
+    -30px 30px 100px rgba(0, 0, 0, 0.45),
+    0 0 80px rgba(60, 100, 180, 0.05);
+
+  will-change: transform;
+
+  transform-origin: center center;
+}
+
+/* ==========================================
+   PANEL LABEL
+========================================== */
+
+.panelLabel {
+  margin-bottom: 22px;
+
+  color: #76a9ff;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  letter-spacing: 4px;
+
+  line-height: 1.4;
+}
+
+.panelLabel span {
+  opacity: 0.4;
+}
+
+/* ==========================================
+   HEADING
+========================================== */
+
+.panelTitle {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: clamp(
+    38px,
+    4vw,
+    68px
+  );
+
+  line-height: 0.98;
+
+  font-weight: 600;
+
+  letter-spacing: -2px;
+}
+
+/* ==========================================
+   ACCENT LINE
+========================================== */
+
+.panelLine {
+  width: 70px;
+  height: 2px;
+
+  margin: 30px 0;
+
+  background: #5f9dff;
+
+  box-shadow:
+    0 0 12px rgba(95, 157, 255, 0.5),
+    0 0 30px rgba(95, 157, 255, 0.15);
+}
+
+/* ==========================================
+   DESCRIPTION
+========================================== */
+
+.panelText {
+  max-width: 470px;
+
+  margin: 0;
+
+  color: #aab8ce;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+
+  font-weight: 400;
+}
+
+/* ==========================================
+   SCROLL INDICATOR
+========================================== */
+
+.scrollHint {
+  position: absolute;
+
+  left: 6%;
+  bottom: 8%;
+
+  z-index: 10;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  color: #74839d;
+
+  font-size: 10px;
+
+  font-weight: 500;
+
+  letter-spacing: 3px;
+
+  user-select: none;
+}
+
+.arrow {
+  display: inline-block;
+
+  font-size: 20px;
+
+  line-height: 1;
+
+  animation: scrollArrow 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollArrow {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translateY(7px);
+    opacity: 1;
+  }
+}
+
+/* ==========================================
+   PROGRESS
+========================================== */
+
+.progress {
+  position: absolute;
+
+  right: 7%;
+  bottom: 7%;
+
+  z-index: 20;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  color: #71809a;
+
+  font-size: 10px;
+
+  font-weight: 500;
+
+  letter-spacing: 2px;
+
+  user-select: none;
+}
+
+.progressLine {
+  position: relative;
+
+  width: 100px;
+  height: 1px;
+
+  overflow: hidden;
+
+  background: rgba(
+    130,
+    160,
+    200,
+    0.2
+  );
+}
+
+.progressFill {
+  width: 100%;
+  height: 100%;
+
+  background: #6b9eff;
+
+  transform-origin: left center;
+
+  will-change: transform;
+
+  box-shadow:
+    0 0 8px rgba(107, 158, 255, 0.5);
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 1000px) {
+  .panel {
+    right: 4%;
+
+    width: 48vw;
+
+    padding: 40px;
+  }
+
+  .panelTitle {
+    font-size: 42px;
+  }
+
+  .panelText {
+    font-size: 15px;
+  }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+  .section {
+    height: 350vh;
+  }
+
+  .topLabel {
+    top: 5%;
+    left: 5%;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+  }
+
+  .panel {
+    top: 68%;
+
+    right: 5%;
+
+    width: 90%;
+
+    padding: 30px;
+  }
+
+  .panelTitle {
+    font-size: 34px;
+
+    line-height: 1;
+
+    letter-spacing: -1px;
+  }
+
+  .panelLabel {
+    margin-bottom: 16px;
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+  }
+
+  .panelLine {
+    width: 55px;
+
+    margin: 22px 0;
+  }
+
+  .panelText {
+    font-size: 14px;
+
+    line-height: 1.7;
+  }
+
+  .scrollHint {
+    display: none;
+  }
+
+  .progress {
+    right: 5%;
+    bottom: 4%;
+
+    gap: 10px;
+  }
+
+  .progressLine {
+    width: 70px;
+  }
+}
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media (max-width: 420px) {
+  .panel {
+    top: 65%;
+
+    padding: 24px;
+  }
+
+  .panelTitle {
+    font-size: 29px;
+  }
+
+  .panelText {
+    font-size: 13px;
+  }
+
+  .progress {
+    font-size: 9px;
+  }
+
+  .progressLine {
+    width: 55px;
+  }
+}

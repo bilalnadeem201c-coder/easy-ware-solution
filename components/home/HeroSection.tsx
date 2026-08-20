@@ -3,7 +3,6 @@ import { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, Variants } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import ParticleField from '@/components/ParticleField';
 
 // Stage 1 (first zoom) finishes ~1.4s — heading + all content reveal together.
 // Stage 2 (full zoom) finishes ~2.7s — heading crossfades to the second line.
@@ -41,22 +40,7 @@ export default function HeroSection() {
       className="noise"
       style={{ minHeight: '100vh', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'var(--navy)' }}
     >
-      {/* Particle cube background — two-stage zoom, then interactive (drag/scroll) */}
-      <iframe
-        src="/particle-cube.html"
-        title="Particle cube background"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          border: 'none',
-          zIndex: 0,
-          pointerEvents: 'auto',
-        }}
-      />
 
-      <ParticleField />
       <div className="orb" style={{ width: 600, height: 600, background: 'rgba(124,58,237,0.15)', top: '-10%', left: '-15%', pointerEvents: 'none' }} />
       <div className="orb" style={{ width: 500, height: 500, background: 'rgba(6,182,212,0.1)', bottom: '-5%', right: '-10%', pointerEvents: 'none' }} />
       <motion.div style={{ y: smoothY, opacity, position: 'absolute', inset: 0, pointerEvents: 'none' }} className="grid-bg" />

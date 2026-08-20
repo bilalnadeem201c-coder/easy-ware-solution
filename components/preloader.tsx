@@ -23,32 +23,52 @@ interface MouseState {
   active: boolean;
 }
 
+interface PreloaderProps {
+  /** Fired once the logo has fully assembled AND been visible for a short beat. */
+  onComplete?: () => void;
+}
+
+// All timings below sum to a minimum ~4.2s total display, which leaves
+// comfortable margin above the "at least 4 seconds" requirement even on
+// slow connections where the logo image itself takes a moment to load.
 const CONFIG = {
   gap: 3,
   particleSize: 2.2,
-  assembleTime: 1800,      // ← 1.8 sec assemble
-  startDelay: 200,         // ← 0.2 sec delay
+  startDelay: 200,          // pause before assembly begins
+  assembleTime: 2700,       // slower, smoother assemble (was 1800 — too fast/abrupt)
+  logoRevealDelay: 300,     // pause after assembly before logo fades in
+  holdAfterReveal: 1000,    // how long the logo stays fully visible before onComplete fires
   mouseRadius: 110,
   mouseForce: 12,
+  // Physics below are normalized to a 60fps baseline (see `dt` in animate())
+  // so assembly speed looks identical on 60Hz, 90Hz, and 120Hz+ displays —
+  // this is what was causing the "speed not consistent" glitching.
+  baseFrameMs: 1000 / 60,
+  maxDt: 3, // clamp dt so a dropped/laggy frame can't cause a visible jump
 };
 
-export default function Preloader() {
+export default function Preloader({ onComplete }: PreloaderProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
-  
+
   const particlesRef = useRef<Particle[]>([]);
   const startTimeRef = useRef<number>(0);
+  const lastFrameTimeRef = useRef<number>(0);
   const finishedRef = useRef(false);
   const mouseRef = useRef<MouseState>({ x: -9999, y: -9999, active: false });
   const animFrameRef = useRef<number>(0);
+  const resizeTimeoutRef = useRef<number | undefined>(undefined);
   const WRef = useRef(0);
   const HRef = useRef(0);
   const dprRef = useRef(1);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
-  const easeOut = useCallback((t: number) => {
-    return 1 - Math.pow(1 - t, 4);
-  }, []);
+  // Keep a stable ref to the latest onComplete so the animate() loop
+  // (created once) always calls the current callback without re-subscribing.
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   const buildParticles = useCallback(() => {
     const canvas = canvasRef.current;
@@ -128,8 +148,6 @@ export default function Preloader() {
     const H = window.innerHeight;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    WRef.current = W;
-    HRef.current = H;
     dprRef.current = dpr;
 
     canvas.width = W * dpr;
@@ -161,11 +179,17 @@ export default function Preloader() {
 
       animFrameRef.current = requestAnimationFrame(animate);
 
+      // Frame-rate independent step: 1.0 == exactly 60fps worth of motion.
+      // Clamped so a stutter/tab-switch can't cause a visible teleport.
+      if (!lastFrameTimeRef.current) lastFrameTimeRef.current = now;
+      const rawDt = (now - lastFrameTimeRef.current) / CONFIG.baseFrameMs;
+      const dt = Math.max(0, Math.min(rawDt, CONFIG.maxDt));
+      lastFrameTimeRef.current = now;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const elapsed = now - startTimeRef.current;
       const progress = Math.max(0, Math.min(1, elapsed / CONFIG.assembleTime));
-      const eased = easeOut(progress);
 
       const mouse = mouseRef.current;
       const particles = particlesRef.current;
@@ -174,11 +198,11 @@ export default function Preloader() {
         if (progress < 1) {
           const dx = p.homeX - p.x;
           const dy = p.homeY - p.y;
-          p.vx += dx * p.spring;
-          p.vy += dy * p.spring;
+          p.vx += dx * p.spring * dt;
+          p.vy += dy * p.spring * dt;
         } else {
-          p.vx += (p.homeX - p.x) * 0.006;
-          p.vy += (p.homeY - p.y) * 0.006;
+          p.vx += (p.homeX - p.x) * 0.006 * dt;
+          p.vy += (p.homeY - p.y) * 0.006 * dt;
         }
 
         if (mouse.active) {
@@ -188,17 +212,20 @@ export default function Preloader() {
 
           if (distance < CONFIG.mouseRadius && distance > 0.1) {
             const force = Math.pow(1 - distance / CONFIG.mouseRadius, 2) * CONFIG.mouseForce;
-            p.vx += (dx / distance) * force;
-            p.vy += (dy / distance) * force;
+            p.vx += (dx / distance) * force * dt;
+            p.vy += (dy / distance) * force * dt;
           }
         }
 
-        p.vx *= 0.82;
-        p.vy *= 0.82;
+        // Time-correct damping (exponential decay scaled by dt, not a flat
+        // per-frame multiply) — this is the other half of the speed fix.
+        const damping = Math.pow(0.82, dt);
+        p.vx *= damping;
+        p.vy *= damping;
         p.vx = Math.max(-5, Math.min(5, p.vx));
         p.vy = Math.max(-5, Math.min(5, p.vy));
-        p.x += p.vx;
-        p.y += p.vy;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
 
         drawParticle(ctx, p);
       }
@@ -207,10 +234,13 @@ export default function Preloader() {
         finishedRef.current = true;
         setTimeout(() => {
           logo?.classList.add("show");
-        }, 250);
+          setTimeout(() => {
+            onCompleteRef.current?.();
+          }, CONFIG.holdAfterReveal);
+        }, CONFIG.logoRevealDelay);
       }
     },
-    [easeOut, drawParticle]
+    [drawParticle]
   );
 
   useEffect(() => {
@@ -230,8 +260,18 @@ export default function Preloader() {
       mouseRef.current.active = false;
     };
 
+    // Debounced + threshold-guarded: mobile browsers fire "resize" when the
+    // address bar collapses/expands on scroll, which used to fully restart
+    // the particle assembly mid-animation — that was the visible "glitch".
+    // Only a genuine size change (real rotation/window resize) rebuilds now.
     const handleResize = () => {
-      resizeCanvas();
+      if (resizeTimeoutRef.current) window.clearTimeout(resizeTimeoutRef.current);
+      resizeTimeoutRef.current = window.setTimeout(() => {
+        const widthChanged = Math.abs(window.innerWidth - WRef.current) > 40;
+        const heightChanged = Math.abs(window.innerHeight - HRef.current) > 80;
+        if (!widthChanged && !heightChanged) return;
+        resizeCanvas();
+      }, 150);
     };
 
     image.onload = () => {
@@ -245,6 +285,7 @@ export default function Preloader() {
 
     return () => {
       cancelAnimationFrame(animFrameRef.current);
+      if (resizeTimeoutRef.current) window.clearTimeout(resizeTimeoutRef.current);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerleave", handlePointerLeave);
       window.removeEventListener("resize", handleResize);
