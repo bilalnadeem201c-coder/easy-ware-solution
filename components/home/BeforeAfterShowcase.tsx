@@ -376,6 +376,7 @@ function BeforeAfterSlider({ before, after, label, tag, defaultPos = 50, onEnter
               background: '#0a0a12',
               cursor: dragging ? 'grabbing' : 'grab',
               userSelect: 'none',
+              touchAction: 'none',
               transition: 'box-shadow 0.25s ease',
             }}
             onPointerDown={onPointerDown}
