@@ -180,57 +180,6 @@
   font-weight: 400;
 }
 
-/* ==========================================
-   SCROLL INDICATOR
-========================================== */
-
-.scrollHint {
-  position: absolute;
-
-  left: 6%;
-  bottom: 8%;
-
-  z-index: 10;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 10px;
-
-  color: #74839d;
-
-  font-size: 10px;
-
-  font-weight: 500;
-
-  letter-spacing: 3px;
-
-  user-select: none;
-}
-
-.arrow {
-  display: inline-block;
-
-  font-size: 20px;
-
-  line-height: 1;
-
-  animation: scrollArrow 1.8s ease-in-out infinite;
-}
-
-@keyframes scrollArrow {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.5;
-  }
-
-  50% {
-    transform: translateY(7px);
-    opacity: 1;
-  }
-}
 
 /* ==========================================
    PROGRESS
@@ -367,10 +316,6 @@
     font-size: 14px;
 
     line-height: 1.7;
-  }
-
-  .scrollHint {
-    display: none;
   }
 
   .progress {

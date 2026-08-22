@@ -2,27 +2,32 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./ScrollRevealSection.module.css";
-
 const content = [
   {
     number: "01",
     label: "TECHNOLOGY",
     title: "Technology That Moves Business Forward",
     text: "We deliver innovative technology solutions designed to simplify operations, improve efficiency, and help businesses stay connected in a rapidly evolving digital world.",
+    image: "/images/tech-slide.jpg",
   },
   {
     number: "02",
     label: "ENTERPRISE SOLUTIONS",
     title: "Solutions Built Around Your Business",
     text: "From enterprise applications to infrastructure and networking, our solutions are designed around real business requirements and long-term performance.",
+    image: "/images/enterprise-slide.jpg",
   },
   {
     number: "03",
     label: "DIGITAL INNOVATION",
     title: "Turning Ideas Into Digital Solutions",
     text: "Our team combines technical expertise with practical business knowledge to create reliable, scalable, and future-ready digital experiences.",
+    image: "/images/digital-slide.jpg",
   },
 ];
+
+
+
 
 export default function ScrollRevealSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -177,6 +182,21 @@ export default function ScrollRevealSection() {
             EASY WARE SOLUTIONS
             <span> / DIGITAL SYSTEMS</span>
           </div>
+          <div
+    className={styles.imageWrap}
+    style={{
+      opacity: eased,
+      transform: `translateX(${(1 - eased) * -50}px) scale(${0.92 + eased * 0.08})`,
+    }}
+  >
+    <img
+      key={active.image}
+      src={active.image}
+      alt={active.title}
+      className={styles.floatImage}
+    />
+  </div>
+  {/* ⬆️ YAHAN TAK ⬆️ */}
 
           {/* =====================================
               RIGHT CONTENT
