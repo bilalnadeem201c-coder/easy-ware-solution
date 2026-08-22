@@ -183,12 +183,12 @@ export default function ScrollRevealSection() {
             <span> / DIGITAL SYSTEMS</span>
           </div>
           <div
-    className={styles.imageWrap}
-    style={{
-      opacity: eased,
-      transform: `translateX(${(1 - eased) * -50}px) scale(${0.92 + eased * 0.08})`,
-    }}
-  >
+  className={styles.imageWrap}
+  style={{
+    opacity: eased,
+    transform: `translateY(-50%) translateX(${(1 - eased) * -50}px) scale(${0.92 + eased * 0.08})`,
+  }}
+>
     <img
       key={active.image}
       src={active.image}
@@ -228,18 +228,6 @@ export default function ScrollRevealSection() {
             <p className={styles.panelText}>
               {active.text}
             </p>
-          </div>
-
-          {/* =====================================
-              SCROLL INDICATOR
-          ====================================== */}
-
-          <div className={styles.scrollHint}>
-            <span>SCROLL TO EXPLORE</span>
-
-            <span className={styles.arrow}>
-              ↓
-            </span>
           </div>
 
           {/* =====================================
