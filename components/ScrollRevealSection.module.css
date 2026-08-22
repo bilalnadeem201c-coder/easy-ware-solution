@@ -64,6 +64,53 @@
 }
 
 /* ==========================================
+   LEFT FLOATING IMAGE
+========================================== */
+
+.imageWrap {
+  position: absolute;
+
+  top: 50%;
+  left: 7%;
+
+  z-index: 15;
+
+  width: min(420px, 34vw);
+
+  transform-origin: center center;
+
+  transition: opacity 0.15s linear, transform 0.15s linear;
+
+  pointer-events: none;
+}
+
+.floatImage {
+  width: 100%;
+  height: auto;
+
+  display: block;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(95, 157, 255, 0.12);
+
+  border: 1px solid rgba(130, 170, 255, 0.15);
+
+  animation: floatImg 4.5s ease-in-out infinite;
+}
+
+@keyframes floatImg {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
+}
+
+/* ==========================================
    RIGHT CONTENT PANEL
 ========================================== */
 
@@ -260,6 +307,11 @@
   .panelText {
     font-size: 15px;
   }
+
+  .imageWrap {
+    width: 40vw;
+    left: 5%;
+  }
 }
 
 /* ==========================================
@@ -272,56 +324,51 @@
   }
 
   .topLabel {
-    top: 5%;
+    top: 4%;
     left: 5%;
-
     font-size: 8px;
-
     letter-spacing: 2px;
   }
 
+  .imageWrap {
+    display: block;
+    top: 26%;
+    left: 10%;
+    width: 80%;
+  }
+
   .panel {
-    top: 68%;
-
+    top: 76%;
     right: 5%;
-
     width: 90%;
-
-    padding: 30px;
+    padding: 24px;
   }
 
   .panelTitle {
-    font-size: 34px;
-
-    line-height: 1;
-
+    font-size: 28px;
+    line-height: 1.05;
     letter-spacing: -1px;
   }
 
   .panelLabel {
-    margin-bottom: 16px;
-
+    margin-bottom: 12px;
     font-size: 9px;
-
     letter-spacing: 3px;
   }
 
   .panelLine {
     width: 55px;
-
-    margin: 22px 0;
+    margin: 16px 0;
   }
 
   .panelText {
-    font-size: 14px;
-
-    line-height: 1.7;
+    font-size: 13px;
+    line-height: 1.6;
   }
 
   .progress {
     right: 5%;
-    bottom: 4%;
-
+    bottom: 3%;
     gap: 10px;
   }
 
@@ -335,18 +382,22 @@
 ========================================== */
 
 @media (max-width: 420px) {
-  .panel {
-    top: 65%;
+  .imageWrap {
+    top: 20%;
+    width: 85%;
+  }
 
-    padding: 24px;
+  .panel {
+    top: 80%;
+    padding: 20px;
   }
 
   .panelTitle {
-    font-size: 29px;
+    font-size: 24px;
   }
 
   .panelText {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .progress {
@@ -355,64 +406,5 @@
 
   .progressLine {
     width: 55px;
-  }
-}
-/* ==========================================
-   LEFT FLOATING IMAGE
-========================================== */
-
-.imageWrap {
-  position: absolute;
-
-  top: 50%;
-  left: 7%;
-
-  z-index: 15;
-
-  width: min(420px, 34vw);
-
-  transform-origin: center center;
-
-  transition: opacity 0.15s linear, transform 0.15s linear;
-
-  pointer-events: none;
-}
-
-.floatImage {
-  width: 100%;
-  height: auto;
-
-  display: block;
-
-  border-radius: 12px;
-
-  box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.5),
-    0 0 60px rgba(95, 157, 255, 0.12);
-
-  border: 1px solid rgba(130, 170, 255, 0.15);
-
-  animation: floatImg 4.5s ease-in-out infinite;
-}
-
-@keyframes floatImg {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-18px);
-  }
-}
-
-@media (max-width: 1000px) {
-  .imageWrap {
-    width: 40vw;
-    left: 5%;
-  }
-}
-
-@media (max-width: 700px) {
-  .imageWrap {
-    display: none;
   }
 }
